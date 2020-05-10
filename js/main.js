@@ -130,6 +130,210 @@ function restart() {
 }
 
 /**
+ * Создает основные игровые элементы (диалоги, доски, корабли)
+ */
+function makeGame() {
+
+    // Элемент контейнера
+    const container = document.getElementById("board");
+
+    // Создание доски
+    container.innerHTML += makeBoard("board", "player");
+    container.innerHTML += makeBoard("board", "computer");
+
+    // Создание кораблей
+    makeShips("player", true);
+    makeShips("computer", false);
+}
+
+
+/**
+ * Генерирование игровой доски
+ * @param parent
+ * @param tag
+ * @returns {string}
+ */
+function makeBoard(parent, tag) {
+
+    // HTML таблицы
+    let board = `<table id=${tag} class="board-${tag}">`;
+
+    // Горизонтальный / вертикальный индекс
+    let horizontalIndex = 0;
+    let verticalIndex = 1;
+
+    // Массив досок
+    let boardArray = [];
+    let boardArrayRow = [];
+
+    // Генерирование таблицы
+    for (let positionX = 0; positionX <= SIZE[0] + 1; positionX++) {
+
+        // Открытие тега
+        board += '<tr>';
+
+        // Первая строка
+        if (positionX === 0) {
+
+            for (let positionY = 0; positionY <= SIZE[1] + 1; positionY++) {
+                if (positionY === 0 || positionY === SIZE[1] + 1) {
+                    board += `<td></td>`;
+                } else {
+                    board += `<td class="index">${ALPHABET[horizontalIndex++]}</td>`;
+                }
+            }
+
+            // Последняя строка
+        } else if (positionX === SIZE[0] + 1) {
+
+            boardArrayRow = [];
+
+            for (let positionY = 0; positionY <= SIZE[1] + 1; positionY++) {
+                board += `<td></td>`;
+                boardArrayRow.push(0);
+            }
+
+            boardArray.push(boardArrayRow);
+
+            // Остальные строки
+        } else {
+
+            boardArrayRow = [];
+
+            for (let positionY = 0; positionY <= SIZE[1] + 1; positionY++) {
+                if (positionY === 0) {
+                    board += `<td class="index">${verticalIndex++}</td>`;
+                } else if (positionY === SIZE[1] + 1) {
+                    board += `<td></td>`;
+                } else {
+                    board += `<td class="game-tile" id="${positionX}_${positionY}" onclick="onTileClick(${positionX}, ${positionY})"></td>`;
+                    boardArrayRow.push(0);
+                }
+            }
+
+            boardArray.push(boardArrayRow);
+        }
+
+        // Закрытие тега
+        board += '</tr>';
+    }
+
+    // Закрытия тега для таблицы
+    board += '</table>';
+
+    // Сохранение доски
+    tag === 'player' ? player = boardArray : computer = boardArray;
+
+    // Возврат доски
+    return board;
+}
+
+/**
+ * Инициализация генерации кораблей
+ * @param tag
+ * @param draw
+ */
+function makeShips(tag, draw) {
+    SHIPS.forEach(ship => {
+        placeShip(ship, tag, draw);
+    });
+}
+
+/**
+ * Размещение корабля (длина, ориентация)
+ * @param ship
+ * @param tag
+ * @param draw
+ */
+function placeShip(ship, tag, draw) {
+
+    // Элемент доски
+    let board = document.getElementById(tag);
+    let rows = board.getElementsByTagName("tr");
+
+    // Количество кораблей
+    let amount = ship[0];
+
+    // Длина корабля
+    let length = ship[1];
+
+    for (let index = 1; index <= amount; index++) {
+
+        // Случайная ориентация
+        let orientation = Math.random() < 0.5;
+
+        // Случайная позиция
+        let position = getRandomPosition();
+
+        // Выбор ориентации
+        if (orientation) {
+            while (position[1] + length > 10) {
+                position = getRandomPosition();
+            }
+        } else {
+            while (position[0] + length > 10) {
+                position = getRandomPosition();
+            }
+        }
+
+        // Получение изначальных координат
+        let boatPositions = getPositions(position, length, orientation);
+
+        // Валидность координат
+        let isValid = validatePositions(boatPositions, tag);
+
+        // До тех пор, пока корабль не будет нарушать правил расположения
+        while (!isValid) {
+
+            orientation = Math.random() < 0.5;
+            position = getRandomPosition();
+
+            if (orientation) {
+                while (position[1] + length > 10) {
+                    position = getRandomPosition();
+                }
+            } else {
+                while (position[0] + length > 10) {
+                    position = getRandomPosition();
+                }
+            }
+
+            boatPositions = getPositions(position, length, orientation);
+            isValid = validatePositions(boatPositions, tag);
+        }
+
+        // Информация о лодках
+        let shipInfo = [];
+
+        boatPositions.forEach(boatPosition => {
+
+            let positionX = boatPosition[0];
+            let positionY = boatPosition[1];
+
+            if (tag === "player") {
+                player[positionX][positionY] = 1;
+            } else {
+                computer[positionX][positionY] = 1;
+            }
+
+            if (draw) {
+                const element = rows[boatPosition[0]].getElementsByTagName("td")[boatPosition[1]];
+                element.style.backgroundColor = COLOR_HIGHLIGHT;
+            }
+
+            shipInfo.push(boatPosition);
+        });
+
+        // Помещение информацию в соответствующий массив (игрок || компьютер)
+        if (tag === "player") {
+            playerShipsInfo.push(shipInfo);
+        } else {
+            computerShipsInfo.push(shipInfo);
+        }
+    }
+}
+
+/**
  * Обновление содержимого HTML компонента
  * @param component
  * @param html
