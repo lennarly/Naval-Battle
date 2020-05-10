@@ -43,6 +43,7 @@ let computerPlayedMoves = [];
 // Основная инициализация для игры.
 window.onload = () => {
     document.getElementById('play').addEventListener('click', start);
+    document.getElementById('start-over').addEventListener('click', restart);
 };
 
 /**
