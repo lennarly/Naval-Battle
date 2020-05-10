@@ -59,7 +59,7 @@ function start() {
     updateHTML("name", name);
 
     initialize(SIZE[0], SIZE[1]);
-    // makeGame();
+    makeGame();
 
     document.getElementById('auth').style.display = 'none';
     document.getElementById('game').style.display = 'block';
@@ -93,6 +93,40 @@ function getOffsets() {
         [1, 0],
         [1, 1]
     ];
+}
+
+/**
+ * Перезагрузка игры
+ */
+function restart() {
+
+    // Элемент контейнера
+    const container = document.getElementById("board");
+
+    // Создание доски
+    container.innerHTML = '';
+
+    // По умолчанию
+    moves = [];
+    player = [];
+    computer = [];
+    playerHits = 0;
+    computerHits = 0;
+    playerShipsInfo = [];
+    computerShipsInfo = [];
+    computerPlayedMoves = [];
+    currentTurn = true;
+
+    // Возобновляем игру
+    stop = false;
+
+    // Скрываем сообщение
+    document.getElementById('message').style.display = 'none';
+
+    // Создание игры
+    initialize(SIZE[0], SIZE[1]);
+    makeGame();
+
 }
 
 /**
