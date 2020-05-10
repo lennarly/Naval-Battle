@@ -456,6 +456,9 @@ function onTileClick(x, y) {
             computer[x][y] = 3;
             computerHits += 1;
 
+            // Проверяем, затонул ли корабль
+            checkCompleteShip("computer");
+
             // Устанавливаем соответствующую картинку
             row.getElementsByTagName("td")[y].innerHTML = IMG_CROSS;
 
@@ -510,6 +513,9 @@ function play() {
             // Устанавливаем соответствующую картинку
             row.getElementsByTagName("td")[y].innerHTML = IMG_CROSS;
 
+            // Проверяем, затонул ли корабль
+            checkCompleteShip("player");
+
             if (playerHits === 20) {
                 document.getElementById('message').innerText = 'Вы проиграли в этой игре!';
                 document.getElementById('message').style.display = 'block';
@@ -537,6 +543,77 @@ function play() {
  */
 function getRandomPosition() {
     return moves[Math.floor(Math.random() * moves.length)];
+}
+
+
+/**
+ * Проверяет, затонул ли корабль
+ * @param tag
+ */
+function checkCompleteShip(tag) {
+
+    if (tag === "player") {
+
+        playerShipsInfo.forEach(info => {
+
+            // По умолчанию утопленное состояние
+            let sunk = true;
+
+            info.forEach(position => {
+
+                // Позиции X & Y
+                const x = position[0];
+                const y = position[1];
+
+                // Элемент без попадания
+                if (player[x][y] !== 3) {
+                    sunk = false;
+                }
+            });
+
+            // Корабль затонул
+            if (sunk) {
+                const board = document.getElementById("player");
+                const rows = board.getElementsByTagName("tr");
+                info.forEach(position => {
+                    const row = rows[position[0]];
+                    row.getElementsByTagName("td")[position[1]].style.backgroundColor = COLOR_SUNK;
+                });
+            }
+
+        });
+
+    } else {
+
+        computerShipsInfo.forEach(info => {
+
+            // По умолчанию утопленное состояние
+            let sunk = true;
+
+            info.forEach(position => {
+
+                // Позиции X & Y
+                const x = position[0];
+                const y = position[1];
+
+                // Элемент без попадания
+                if (computer[x][y] !== 3) {
+                    sunk = false;
+                }
+            });
+
+            // Корабль затонул
+            if (sunk) {
+                const board = document.getElementById("computer");
+                const rows = board.getElementsByTagName("tr");
+                info.forEach(position => {
+                    const row = rows[position[0]];
+                    row.getElementsByTagName("td")[position[1]].style.backgroundColor = COLOR_SUNK;
+                });
+            }
+
+        });
+    }
 }
 
 /**
