@@ -333,6 +333,36 @@ function placeShip(ship, tag, draw) {
     }
 }
 
+
+/**
+ * Создание всех позиций для возможного корабля
+ * @param position
+ * @param length
+ * @param orientation
+ * @returns {[]}
+ */
+function getPositions(position, length, orientation) {
+
+    let boat_positions = [];
+
+    for (let i = 0; i < length; i++) {
+        let x, y;
+
+        if (orientation) {
+            x = position[0];
+            y = position[1] + i;
+        } else {
+            x = position[0] + i;
+            y = position[1];
+        }
+
+        boat_positions.push([x, y]);
+    }
+
+    return boat_positions;
+}
+
+
 /**
  * Обновление содержимого HTML компонента
  * @param component
