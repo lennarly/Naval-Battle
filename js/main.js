@@ -343,7 +343,7 @@ function placeShip(ship, tag, draw) {
  */
 function getPositions(position, length, orientation) {
 
-    let boat_positions = [];
+    let boatPositions = [];
 
     for (let i = 0; i < length; i++) {
         let x, y;
@@ -356,12 +356,37 @@ function getPositions(position, length, orientation) {
             y = position[1];
         }
 
-        boat_positions.push([x, y]);
+        boatPositions.push([x, y]);
     }
 
-    return boat_positions;
+    return boatPositions;
 }
 
+/**
+ * Валидация расположения корабля
+ * @param boat_positions
+ * @param tag
+ * @returns {boolean}
+ */
+function validatePositions(boat_positions, tag) {
+    let valid = true;
+    boat_positions.forEach(boat => {
+        getOffsets().forEach(offset => {
+            try {
+                // Содержит ли любое из этих смещений значение 1
+                const row = boat[0] + offset[0];
+                const column = boat[1] + offset[1];
+                // Значение элемента
+                const value = (tag === "player") ? player[row][column] : computer[row][column];
+                // Проверка условия
+                if (value !== 0 && value !== undefined) {
+                    valid = false;
+                }
+            } catch (e) {}
+        });
+    });
+    return valid;
+}
 
 /**
  * Обновление содержимого HTML компонента
