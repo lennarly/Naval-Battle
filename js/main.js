@@ -397,3 +397,33 @@ function validatePositions(boat_positions, tag) {
 function updateHTML(component, html) {
     document.getElementById(component).innerHTML = html;
 }
+
+/**
+ * Получить случайную доступную позицию
+ * Для компьютера
+ * @returns {[*, *]}
+ */
+function getRandomAvailablePosition() {
+
+    // Случайные позиции
+    const x = Math.floor(Math.random() * 10) + 1;
+    const y = Math.floor(Math.random() * 10) + 1;
+
+    // Начальная позиция
+    let move = [x, y];
+
+    // Поиск доступной позиции
+    for (let i = 0; i < computerPlayedMoves.length; i++) {
+        const cMove = computerPlayedMoves[i];
+        if (cMove[0] === x && cMove[1] === y) {
+            move = getRandomAvailablePosition();
+            break;
+        }
+    }
+
+    // Добавление в стек в стек
+    computerPlayedMoves.push(move);
+
+    // Возвращение позиции
+    return move;
+}
