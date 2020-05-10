@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!-- Title -->
+    <title>Морской бой</title>
+    <!-- Style -->
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+<div id="auth" class="auth">
+    <div class="auth__title">Введите свое имя</div>
+    <div class="auth__message"></div>
+    <label>
+        <input type="text" id="login" value="" placeholder="Ваше имя...">
+    </label>
+    <button id="play" type="submit">Играть</button>
+</div>
+<div id="game">
+    <button id="start-over" class="start-over">
+        Начать заново
+    </button>
+    <h2>
+        Текущий ход:
+        <span id="name">Игрок</span>
+    </h2>
+    <h2 id="message"></h2>
+    <div id="board"></div>
+</div>
+<!-- Script -->
+<script type="text/javascript" src="js/main.js"></script>
+<!-- End Script -->
+</body>
+</html>
