@@ -39,3 +39,36 @@ let currentTurn = true;
 
 // Ходы, сыгранные компьютером
 let computerPlayedMoves = [];
+
+// Основная инициализация для игры.
+window.onload = () => {
+    document.getElementById('play').addEventListener('click', start);
+};
+
+/**
+ * Старт игры
+ */
+function start() {
+
+    name = document.getElementById('login').value;
+
+    if (name === '') {
+        return alert('Некорректное имя!');
+    }
+
+    updateHTML("name", name);
+
+    document.getElementById('auth').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+
+}
+
+
+/**
+ * Обновление содержимого HTML компонента
+ * @param component
+ * @param html
+ */
+function updateHTML(component, html) {
+    document.getElementById(component).innerHTML = html;
+}
