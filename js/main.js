@@ -10,8 +10,8 @@ const SHIPS = [
 ];
 const COLOR_SUNK = 'red';
 const COLOR_HIGHLIGHT = '#3366CC';
-const IMG_CIRCLE = '<img src="/img/circle.png" alt=""/>';
-const IMG_CROSS = '<img src="/img/close.png" alt=""/>';
+const IMG_CIRCLE = '<img src="./img/circle.png" alt=""/>';
+const IMG_CROSS = '<img src="./img/close.png" alt=""/>';
 
 // Игра остановлена
 let stop = false;
@@ -207,7 +207,7 @@ function makeBoard(parent, tag) {
                 } else if (positionY === SIZE[1] + 1) {
                     board += `<td></td>`;
                 } else {
-                    board += `<td class="game-tile" id="${positionX}_${positionY}" onclick="onTileClick(${positionX}, ${positionY})"></td>`;
+                    board += `<td class="tile" id="${positionX}_${positionY}" onclick="onTileClick(${positionX}, ${positionY})"></td>`;
                     boardArrayRow.push(0);
                 }
             }
