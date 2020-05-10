@@ -398,6 +398,44 @@ function updateHTML(component, html) {
     document.getElementById(component).innerHTML = html;
 }
 
+
+/**
+ * Обновление текущего хода
+ */
+function updateTurn() {
+
+    // Если ход принадлежит игроку
+    if (currentTurn) {
+
+        // Ход для компьютера
+        currentTurn = false;
+
+        // Обновляем визуализацию текущего хода
+        updateHTML("name", `Компьютер`);
+
+        // Пауза
+        setTimeout(function() {
+            play();
+        }, TIMEOUT);
+
+    } else {
+        // Ход для игрока
+        currentTurn = true;
+
+        // Обновляем визуализацию текущего хода
+        updateHTML("name", name);
+    }
+}
+
+/**
+ * Получить случайную позицию с координатами X и Y
+ * В пределах границы заданного размера
+ * @returns {*}
+ */
+function getRandomPosition() {
+    return moves[Math.floor(Math.random() * moves.length)];
+}
+
 /**
  * Получить случайную доступную позицию
  * Для компьютера
