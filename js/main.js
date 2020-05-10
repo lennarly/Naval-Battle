@@ -58,11 +58,24 @@ function start() {
 
     updateHTML("name", name);
 
+    initialize(SIZE[0], SIZE[1]);
+    // makeGame();
+
     document.getElementById('auth').style.display = 'none';
     document.getElementById('game').style.display = 'block';
 
 }
 
+/**
+ * Инициализация позиций игры
+ */
+function initialize() {
+    for (let x = 1; x <= SIZE[0]; x++) {
+        for (let y = 1; y <= SIZE[1]; y++) {
+            moves.push([x, y]);
+        }
+    }
+}
 
 /**
  * Обновление содержимого HTML компонента
