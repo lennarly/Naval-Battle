@@ -427,6 +427,109 @@ function updateTurn() {
     }
 }
 
+
+/**
+ * Нажатие на элемент таблицы
+ * @param x
+ * @param y
+ */
+function onTileClick(x, y) {
+
+    if (currentTurn && !stop) {
+
+        // Текущее состояние
+        const value = computer[x][y];
+
+        // Если элемент уже с попаданием, либо выстрелена
+        if (value === 2 || value === 3) {
+            return;
+        }
+
+        // Доска & строка
+        const board = document.getElementById("computer");
+        const rows = board.getElementsByTagName("tr");
+        const row = rows[x];
+
+        if (value === 1) {
+
+            // Меняем состояние элемента, и добавляем попадание
+            computer[x][y] = 3;
+            computerHits += 1;
+
+            // Устанавливаем соответствующую картинку
+            row.getElementsByTagName("td")[y].innerHTML = IMG_CROSS;
+
+            if (computerHits === 20) {
+                document.getElementById('message').innerText = 'Вы победили в этой игре!';
+                document.getElementById('message').style.display = 'block';
+                stop = true;
+            }
+
+        } else {
+
+            // Меняем состояние элемента
+            computer[x][y] = 2;
+
+            // Устанавливаем соответствующую картинку
+            row.getElementsByTagName("td")[y].innerHTML = IMG_CIRCLE;
+
+        }
+
+        updateTurn();
+    }
+}
+
+/**
+ * Игра компьютера
+ */
+function play() {
+
+    try {
+
+        // Получение случайной доступной позиции
+        const position = getRandomAvailablePosition();
+
+        // X & Y
+        const x = position[0];
+        const y = position[1];
+
+        // Получаем состояние клетки
+        const value = player[x][y];
+
+        // Доска & строка
+        const board = document.getElementById("player");
+        const rows = board.getElementsByTagName("tr");
+        const row = rows[x];
+
+        if (value === 1) {
+
+            // Меняем состояние элемента, и добавляем попадание
+            player[x][y] = 3;
+            playerHits += 1;
+
+            // Устанавливаем соответствующую картинку
+            row.getElementsByTagName("td")[y].innerHTML = IMG_CROSS;
+
+            if (playerHits === 20) {
+                document.getElementById('message').innerText = 'Вы проиграли в этой игре!';
+                document.getElementById('message').style.display = 'block';
+                stop = true;
+            }
+        } else {
+
+            // Меняем состояние элемента
+            player[x][y] = 2;
+
+            // Устанавливаем соответствующую картинку
+            row.getElementsByTagName("td")[y].innerHTML = IMG_CIRCLE;
+
+        }
+
+        updateTurn();
+
+    } catch (e) {}
+}
+
 /**
  * Получить случайную позицию с координатами X и Y
  * В пределах границы заданного размера
